@@ -1,0 +1,799 @@
+---
+title: "Mental Health First Aid : Predicting Mental Health in Tech Industry using Machine Learning"
+author: "By : Syabaruddin Malik"
+output:
+  html_document:
+    df_print: paged
+    highlight: zenburn
+    theme: spacelab
+    toc: true
+    toc_float:
+      collapsed: yes
+    number_sections : false
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  comment = "#>")
+options(scipen = 9999)
+```
+
+![](C:\SyabaruddinFolder\Work\Algoritma\DCD\DCD/mental.jpg)
+
+# Background
+
+## Tech's battle with Deppression
+
+The tech and startup world are built on the backs of incredibly bright minds. It's known for its innovation and resilience and a culture that fosters high-productivity.
+
+But it has a dark underbelly.
+
+Tech is a fast-paced game with high stakes: Founders of startups have to transform an idea into a successful, scaleable business — quickly. They're under intense pressure to run a successful company, stay on top of a fast-paced, competitive industry, all while maintaining the same image as the tech titans before them. 
+
+Employees of these companies operate under the same high-stress: late nights, abnormal hours, and tight deadlines, all while wearing multiple hats and being constantly available at any time of day.
+
+The above isn't unique to startups — the pressure to excel and climb the corporate ladder in the carrier world creates a culture that exacerbates mental health issues. And it's also important to remember that there is no fixed state: mental health ebbs and flows along a spectrum, just like our physical health, ranging from thriving to coping or struggling to clinically-treated mental illness.
+
+But the tech industry fosters a "crunch" culture (where demanding work must be completed in a short amount of time). And there's an increased motivation to neglect one’s health by forgoing proper diet, exercise, and sleep in the name of increased output. And if left unchecked, this can lead to a rise in burnout, depression, anxiety, and loneliness. 
+
+## The Growing Mental Health Crisis
+
+Everyone around the world has mental health, but not everyone talks about it. 
+
+According to OSMI data, 51% of tech professionals have been diagnosed with a mental health condition. By comparison, 19.1% of U.S. adults experience mental illness, according to the National Alliance on Mental Illness.
+
+A study by Michael Freeman found that entrepreneurs are 50% more likely to report having a mental health condition:
+
+Founders are:
+
++ 2x more likely to suffer from depression
++ 6x more likely to suffer from ADHD
++ 3x more likely to suffer from substance abuse
++ 10x more likely to suffer from bi-polar disorder
++ 2x more likely to have psychiatric hospitalization
++ 2x more likely to have suicidal thoughts
+
+The terrifying problem with mental illness is that it is invisible; it's a private battle that people have, and it's hard to know when people need help.
+
+
+# Problem Statement
+
+Mental health affects your emotional, psychological and social well-being. It affects how we think, feel, and act. It also helps determine how we handle stress, relate to others, and make choices. In the workplace, communication and inclusion are keys skills for successful high performing teams or employees. The impact of mental health to an organization can mean an increase of absent days from work and a decrease in productivity and engagement. In the United States, approximately 70% of adults with depression are in the workforce. Employees with depression will miss an estimated 35 million workdays a year due mental illness. Those workers experiencing unresolved depression are estimated to encounter a 35% drop in their productivity, costing employers $105 billion dollars each year. In UK, better mental health support in the workplace can save UK business up to Eur 8 billion per year.
+
+![](C:\SyabaruddinFolder\Work\Algoritma\DCD\DCD/download.png)
+
+
+## Project Idea
+
+Open Sourcing Mental Illness (OSMI) is a non-profit, corporation dedicated to raising awareness, educating, and providing resources to support mental wellness in the tech and open source communities. OSMI began in 2013, with Ed Finkler speaking at tech conferences about his personal experiences as a web developer and open source advocate with a mental health disorder. The response was overwhelming, and thus OSMI was born.
+
+![](C:\SyabaruddinFolder\Work\Algoritma\DCD\DCD/osmi.png)
+
+Every year, OSMI came out with a new survey to see how employees want to get mental health treatment in tech companies around the world and I pick the survey from 2014.
+
+This survey is filled by respondents who suffer from mental health disorders (diagnose or un-diagnosed by medical, even it's just a feeling) in tech companies and see if any factors can affect the employee to get treatment or not.
+
+From this research, We will create a machine learning can help HR to see what factors have the company needs to support so the employee wants to get mental health treatment. We call it Mental Health First Aid.
+
+## Problem Scope
+
+Mental Health First Aid teaches HR how to notice and support an individual who may be experiencing a mental health or substance use concern or crisis and connect them with the appropriate employee resources. It teaches employees critical communication and support skills that can influence your organizations bottom line.
+
+Research shows that employees who go through Mental Health First Aid have an increased awareness of mental health among themselves and their co-workers. It allows them to recognize the signs of someone who maybe struggling and teaches them the skills to know when to reach out and what resources are available. Which in turn creates beneficial intervention that increases engagement and creates an environment of inclusion and support.
+
+Employers can also offer robust benefit packages to support employees who go through mental health issues. That includes Employee Assistance Programs, Wellness programs that focus on mental and physical health, Health and Disability Insurance or flexible working schedules or time off policies.
+
+Organizations that incorporate mental health awareness help to create a healthy and productive work environment that reduces the stigma associated with mental illness, increases the organizations mental health literacy and teaches the skills to safely and responsibly respond to a co-workers mental health concern.
+
+Incorporating mental health awareness in the workplace can help lead the way for mental health issues throughout your community by equipping people with the tools they need to start a dialogue so that more people can get the help they need.
+
+# Output
+
+The output of this project is a dashboard analysis and prediction using machine learning using R Shiny dashboard. This dashboard can be utilized by HR team to predict whether any individual may be experiencing a mental health or not.
+
+## Business Impact
+
+As mentioned in the problem statement, Employees with depression will miss an estimated 35 million workdays a year due mental illness. Those workers experiencing unresolved depression are estimated to encounter a 35% drop in their productivity, costing employers $105 billion dollars each year. This is a huge loss of money in terms of business. 
+
+If the employers can solve this issue, not only they can retain their employees, decrease the turnover rate, and increase employees productivity ,they also will save a huge lot of money.
+
+# Exploratory Data Analysis
+
+## Load Library
+
+Before we do the analysis we need to load the library required.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(esquisse)
+```
+
+## Load Data
+
+Now we will load the data for further analysis
+
+Data source : https://www.kaggle.com/osmi/mental-health-in-tech-survey
+
+```{r}
+mental <- read.csv("survey.csv")
+mental
+```
+
+## Data Description
+
+Below are data description on each columns for our understanding
+
++ Timestamps
++ Age
++ Gender
++ Country
++ state: If you live in the United States, which state or territory do you live in?
++ self_employed: Are you self-employed?
++ family_history: Do you have a family history of mental illness?
++ treatment: Have you sought treatment for a mental health condition?
++ work_interfere: If you have a mental health condition, do you feel that it interferes with your work?
++ no_employees: How many employees does your company or organization have?
++ remote_work: Do you work remotely (outside of an office) at least 50% of the time?
++ tech_company: Is your employer primarily a tech company/organization?
++ benefits: Does your employer provide mental health benefits?
++ care_options: Do you know the options for mental health care your employer provides?
++ wellness_program: Has your employer ever discussed mental health as part of an employee wellness program?
++ seek_help: Does your employer provide resources to learn more about mental health issues and how to seek help?
++ anonymity: Is your anonymity protected if you choose to take advantage of mental health or substance abuse treatment resources?
++ leave: How easy is it for you to take medical leave for a mental health condition?
++ mentalhealthconsequence: Do you think that discussing a mental health issue with your employer would have negative consequences?
++ physhealthconsequence: Do you think that discussing a physical health issue with your employer would have negative consequences?
++ coworkers: Would you be willing to discuss a mental health issue with your coworkers?
++ physhealthinterview: Would you bring up a physical health issue with a potential employer in an interview?
++ mentalvsphysical: Do you feel that your employer takes mental health as seriously as physical health?
++ obs_consequence: Have you heard of or observed negative consequences for coworkers with mental health conditions in your workplace?
++ comments: Any additional notes or comments
+
+
+```{r}
+glimpse(mental) #Check Data Types
+colSums(is.na(mental)) #Check NaN
+```
+Some informations we got if we look at the glimpse and the summary of the data:
+
++ There are 1259 rows and  27 columns in the dataset. 
++ Some of the columns data types are not in the correct data type. We will change these data types later.
++ Comment column seems to contain most number ( 70% ) of null values, which makes sense because it was an optional text box so it's reasonable to expect that many (most) respondents would leave it blank.
++ We will be dropping the timestamp column because it's contains date, month, year and time the respondent took this questionnaire, which is irrelevant for us.
++ The state column, work_interfere, self_employed columns also contains a lot of null values. We'll dig deeper into that.
+
+```{r}
+mental %>% count(Country) %>% arrange(desc(n))
+```
+Some notes if we look at data above:
+
++ It will be really misleading to conclude that a certain country faces more problem with the mental health of employees because around 60% of the people belong to The US.
++ Moreover there are a lot of countries which have only one respondents.
++ The country column thus becomes pointless. We will be dopping this.
++ A quick look at the states suggest us that it is applicable for the one's only in The US, so we'll drop it as well.
+
+## Data Cleaning
+
+### Drop Columns
+
+Refer to the Data summary explanation above, we will drop columns: Timestamp, Country, States, and Comments
+
+```{r}
+mental_clean <- mental %>%  select(-Timestamp,-Country,-state,-comments)
+head(mental_clean)
+```
+
+### Feature's Value Checking
+
+In this section, I process the value of columns that not suitable to neatly arranged.
+
+
+#### Age
+
+```{r}
+unique(mental_clean$Age)
+```
++ If we look at above data, there are age that have negative values and also under 15.
++ The ILO (International Labor Organization) has set a minimum age limit, 15 (fifteen) years which applies in all sectors and becomes a boundary for set the Age column
+
+
+```{r}
+mental_clean1 <- mental_clean %>%  filter(Age > 15,
+                                          Age < 100
+                                          )
+
+unique(mental_clean1$Age)
+
+
+```
+#### Gender
+
+```{r}
+unique(mental_clean1$Gender)
+```
+For the Gender column has 46 distinct responses. I rename and combine if it's in the same meaning, so it will trim the data and separate it into following categories:
+- Male, or cis Male, means born as male and decide to be male.
+- Female, or cis Female, means born as female and decide to be female.
+- Queer, is a word that describes sexual and gender identities other than straight and cisgender. Lesbian, gay, bisexual, and transgender people may all identify with the word queer.
+
+```{r}
+mental_clean1["Gender"][mental_clean1["Gender"] == 'Male ' |
+                          mental_clean1["Gender"] == 'male' |
+                          mental_clean1["Gender"] == 'M' |
+                          mental_clean1["Gender"] == 'm' |
+                          mental_clean1["Gender"] == 'Male' |
+                          mental_clean1["Gender"] == 'Cis Male' |
+                          mental_clean1["Gender"] == 'Man' |
+                          mental_clean1["Gender"] == 'cis male' |
+                          mental_clean1["Gender"] == 'Mail' |
+                          mental_clean1["Gender"] == 'Male-ish' |
+                          mental_clean1["Gender"] == 'Male (CIS)' |
+                          mental_clean1["Gender"] == 'Cis Man' |
+                          mental_clean1["Gender"] == 'msle' |
+                          mental_clean1["Gender"] == 'Malr' |
+                          mental_clean1["Gender"] == 'Mal' |
+                          mental_clean1["Gender"] == 'maile' |
+                          mental_clean1["Gender"] == 'Make'] <- "Male"
+
+mental_clean1["Gender"][mental_clean1["Gender"] == 'Female ' |
+                          mental_clean1["Gender"] == 'female' |
+                          mental_clean1["Gender"] == 'F' |
+                          mental_clean1["Gender"] == 'f' |
+                          mental_clean1["Gender"] == 'Woman' |
+                          mental_clean1["Gender"] == 'Female' |
+                          mental_clean1["Gender"] == 'femail' |
+                          mental_clean1["Gender"] == 'cis Female' |
+                          mental_clean1["Gender"] == 'cis-female/femme' |
+                          mental_clean1["Gender"] == 'Femake' |
+                          mental_clean1["Gender"] == 'Female (cis)' |
+                          mental_clean1["Gender"] == 'Cis Female' |
+                          mental_clean1["Gender"] == 'woman' ] <- "Female"
+
+mental_clean1["Gender"][mental_clean1["Gender"] == 'Female (trans)' |
+                          mental_clean1["Gender"] == 'queer/she/they' |
+                          mental_clean1["Gender"] == 'non-binary' |
+                          mental_clean1["Gender"] == 'f' |
+                          mental_clean1["Gender"] == 'fluid' |
+                          mental_clean1["Gender"] == 'queer' |
+                          mental_clean1["Gender"] == 'Androgyne' |
+                          mental_clean1["Gender"] == 'Trans-female' |
+                          mental_clean1["Gender"] == 'male leaning androgynous' |
+                          mental_clean1["Gender"] == 'Agender' |
+                          mental_clean1["Gender"] == 'A little about you' |
+                          mental_clean1["Gender"] == 'Nah' |
+                          mental_clean1["Gender"] == 'All' |
+                          mental_clean1["Gender"] == 'ostensibly male, unsure what that really means' |
+                          mental_clean1["Gender"] == 'Genderqueer' |
+                          mental_clean1["Gender"] == 'Enby' |
+                          mental_clean1["Gender"] == 'p' |
+                          mental_clean1["Gender"] == 'Neuter' |
+                          mental_clean1["Gender"] == 'something kinda male?' |
+                          mental_clean1["Gender"] == 'Guy (-ish) ^_^' |
+                          mental_clean1["Gender"] == 'Trans woman' ] <- "Queer"
+
+
+```
+
+```{r}
+unique(mental_clean1$Gender)
+```
+#### Self Employed & Work Interfere
+
+We have NaN values in self_employed and work_interfere columns
+
+```{r}
+colSums(is.na(mental_clean1))
+```
+Let us try to fill these null values and make our data ready for further processing.
+
++ For work_interfere let's change NaN to "Don't know".
++ For self_employed let's change NaN to NOT self_employed
+
+```{r}
+mental_clean2 <- mental_clean1 %>%  
+                mutate(work_interfere=ifelse(is.na(work_interfere),"Don't Know",work_interfere),
+                       self_employed=ifelse(is.na(self_employed),"No",self_employed)
+                       )
+
+colSums(is.na(mental_clean2))
+
+
+```
+
+
+
+
+### Data Type
+
+After we do some cleaning, now we change the incorrect data type columns to the correct data type
+
+```{r}
+mental_clean2 <- mental_clean2 %>%  
+                mutate_if(is.character,as.factor)
+
+glimpse(mental_clean2)
+
+mental_clean2
+```
+
+
+
+
+## Data Analysis
+
+### Target Data
+
+Let us begin the data analysis by understanding the target data
+
+```{r}
+plot1 <- ggplot(mental_clean2) +
+  aes(x = treatment, fill = treatment) +
+  geom_bar() +
+  scale_fill_hue(direction = 1) +
+  labs(
+    x = "Treatment (Yes/No)",
+    y = "Counts",
+    title = "Do Respondents receive Treatments?"
+  ) +
+  theme_classic()
+
+
+ggplotly(plot1)
+```
+This is the respondents result of question, 'Have you sought treatment for a mental health condition?'.
+
+This is our target variable. Looking at the first graph, we see that the percentage of respondents who want to get treatment is almost 50%. Workplaces that promote mental health and support people with mental disorders are more likely to have increased productivity, reduce absenteeism, and benefit from associated economic gains. If employees enjoy good mental health, employees can:
+
++ Be more productive
++ Take active participation in employee engagement activities and make better relations; both at workplace and personal life.
++ Be more joyous and make people around them happy.
+
+### Profiling Analysis
+
+#### Age
+
+Now let's take a look of our respondents Age distribution
+
+```{r}
+plot2 <- ggplot(mental_clean2) +
+ aes(x = Age, colour = Age) +
+ geom_histogram(bins = 50L, fill = "orange") +
+ scale_color_distiller(palette = "PuBu", 
+ direction = -1) +
+ labs(title = "Age Distribution") +
+ theme_classic()
+
+ggplotly(plot2)
+```
+```{r}
+plot3 <- ggplot(mental_clean2) +
+ aes(x = treatment, y = Age, fill = treatment) +
+ geom_boxplot(shape = "circle") +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Treatments with Age Distribution") +
+ theme_classic()
+
+ggplotly(plot3)
+
+```
+If we look at Plot 2 and Plot 3:
+
++ It's indicated that most of the employees that fill the survey around the end 20s to early 40s. I assume that they on between mid to senior-level positions. The distribution of ages is right-skewed which is expected as the tech industry tends to have younger employees. From an article that I read, young (usually white, mostly male) faces of start-up founders like Mark Zuckerberg and other “tech bros” have become the symbol and stereotypical image that tends to represent the tech industry.
++ From the boxplot, there is no statistically significant difference of ages between respondents that get treatment and no treatment.
+
+#### Gender
+
+Now we will take a look at Gender Distribution
+
+```{r}
+plot4 <- ggplot(mental_clean2) +
+ aes(x = Gender, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+  labs(title = "Treatments with Gender Distribution") +
+ theme_classic()
+
+ggplotly(plot4)
+```
+If we look at plot4 above Majority respondents are male, not surprisingly, especially in the tech field. The very large gap between men and women causes higher competitive pressure for women than men. Based on the plot, female that want to get treatment is high around 70%. Maybe some of them get sexual harrassment or racism at work because female are scarce in the tech industry.
+
+There is a Queer entry of less than 2%. Although the percentage of queer is very low, it still deserves to dig out some new insights. For example, such a small proportion can show a significant difference in the count of who wants the treatments, indicating that for the queer, mental health problems are serious too. In my opinion, maybe they received hate speech or discrimination in the workplace.
+
+#### Family History of Mental Illness
+
+```{r}
+plot5 <- ggplot(mental_clean2) +
+ aes(x = family_history, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Family History with Illness") +
+ theme_classic()
+
+ggplotly(plot5)
+```
+
+From respondents who say that they have a family history of mental illness, the plot shows that they significantly want to get treatment rather than without a family history. This is acceptable, remember the fact that people with a family history pay more attention to mental illness. Family history is a significant risk factor for many mental health disorders. The apple does not fall far from the tree, as it is relatively common for families with mental illness symptoms to have one or more relatives with histories of similar difficulties.
+
+
+### Work Environment Analysis
+
+#### Work Interfere
+
+```{r}
+plot6 <- ggplot(mental_clean2) +
+ aes(x = work_interfere, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Work Interfere Survey Respondents") +
+ theme_classic()
+
+ggplotly(plot6)
+```
+This is the respondents result of question, 'If you have a mental health condition, do you feel that it interferes with your work?'. More than half Respondents have experienced interference at work with a ratio of rarely, sometimes, and frequently with majority respondents want to get treatment.But it's surprising to know even mental health never has interfered at work, there is a little group that still want to get treatment before it become a job stress. It can be triggered by the requirements of the job do not match the capabilities, resources or needs of the worker.
+
+#### Working Style
+
+```{r}
+
+plot7 <-ggplot(mental_clean2) +
+ aes(x = remote_work, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Working Style (Remote or Not)") +
+ theme_classic()
+
+ggplotly(plot7)
+```
+Majority of respondents don't work remotely, which means the biggest factor of mental health disorder came up triggered on the workplace. On the other side, it has slightly different between an employee that want to get treatment and don't want to get a treatment. But it's getting interesting when we see a respondent who works 50% of the workday remotely. The employee who want to get treatment is a little bit higher. I have no idea why those employees work remotely to analyze more because the data doesn't provide that information.
+
+#### Company Type
+
+```{r}
+plot8 <- ggplot(mental_clean2) +
+ aes(x = tech_company, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Company Type") +
+ theme_classic()
+
+ggplotly(plot8)
+```
+Even the main target of the survey is the tech field, there are small amount of companies belong to the non-tech field. But it can be seen from the plot whether the company belongs to the tech field or not, mental health still becomes a big problem. I think the environment affects a lot of employees and some of them can't take it for granted like abuse at the workplace.
+
+However, I found that the number of employees in the technology field that want to get treatment is slightly lower than no treatment. But the non-technical field is the opposite. Maybe the non-tech company give more support for employee to get treatment?
+
+#### Coworkers & Supervisors
+
+```{r}
+
+plot9 <- ggplot(mental_clean2) +
+ aes(x = coworkers, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Coworkers of Survey Respondents") +
+ theme_classic()
+
+plot10<- ggplot(mental_clean2) +
+ aes(x = supervisor, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Supervisor of Survey Respondents") +
+ theme_classic()
+
+ggplotly(plot9)
+
+ggplotly(plot10)
+```
+
+This is the respondents result of question, 'Would you be willing to discuss a mental health issue with your coworkers?'.
+
++ From respondents who say yes to discuss it with coworkers, around 60% of them want to get treatment.
++ About more than half of respondents decide to discuss some of them with coworkers. Employees who do that and want to get treatment are half of them. Let's see if the respondent will discuss it with a supervisor or not.
+
+This is the respondents result of question, 'Would you be willing to discuss a mental health issue with your direct supervisor(s)?'.
+
++ From all of respondents who say yes to discuss with supervisor, only 55% of them that want to get treatment. I think maybe talking to someone in a higher position could help the relief. It's the opposite while employees discuss with coworkers.
+
+#### Observed Consequence
+
+```{r}
+
+plot11 <- ggplot(mental_clean2) +
+ aes(x = obs_consequence, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Observed Consequence of Survey Respondents") +
+ theme_classic()
+
+ggplotly(plot11)
+```
+This is the respondents result of question, 'Have you heard of or observed negative consequences for coworkers with mental health conditions in your workplace?'.
+From all of respondents who say yes about knowing the negative consequences for coworkers with mental heatlh condition, almost 70% of them that want to get treatment. After the employee knows about the negative consequences, it becomes a good trigger for someone to get treatment to prevent mental health conditions.
+
+### Mental Health Facilities Analysis
+
+#### Employer Benefits
+
+```{r}
+
+plot12 <- ggplot(mental_clean2) +
+ aes(x = benefits, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Employer Benefits Survey Respondents") +
+ theme_classic()
+
+ggplotly(plot12)
+
+```
+This is the respondents result of question, 'Does your employer provide mental health benefits?'.
+Only around 1/3 of respondents know about mental health benefits that the company provides for them. For employees who know the benefits, almost 60% of the employees want to get treatment. Surprisingly, there is an employee who doesn't know and says that the company doesn't provide still want to get treatment. I assume that maybe the company can't provide it properly because of budgeting or financial struggling.
+
+#### Wellness Program
+
+```{r}
+
+plot13 <- ggplot(mental_clean2) +
+ aes(x = wellness_program, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Wellness Program Survey Respondents") +
+ theme_classic()
+
+ggplotly(plot13)
+```
+This is the respondents result of question, 'Has your employer ever discussed mental health as part of an employee wellness program?'. All of the repondents who say yes about become a part of employee wellness program, around 60% of employee want to get treatment. After become a part of wellness program, i assume that employee feels a good vibe about it.
+
+Majority of respondents say that there aren't any wellness programs that provide by their company. But half of the respondents want to get treatment, which means the company need to provide it soon. Based on my curiosity about company's benefit before, I think it makes sense if it's about company budgeting. I know it will spend a lot of money, moreover, the company has a lot of employees to taking care of. My second thought, it's still about budgeting but for a small company, it's will be a lot of struggle.
+
+#### Anonymity
+
+```{r}
+
+plot14 <- ggplot(mental_clean2) +
+ aes(x = anonymity, fill = treatment) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Anonymity Survey Respondents") +
+ theme_classic()
+
+ggplotly(plot14)
+```
+This is the respondents result of question, 'Is your anonymity protected if you choose to take advantage of mental health or substance abuse treatment resources?'.
+Around 30% of respondents say yes if their anonymity is protected while taking advantage of mental health or substance abuse treatment resources and more than half of employees want to get treatment. The employee feels that the company protected their privacy and it's a good move for the company to build trust with their employees. Because of that, the employee wants to get treatment to be better.
+
+### Exploratory Analysis Conclusion
+
+By providing employees access to mental health benefits, the company can begin to create a culture of understanding and compassion at the tech company. And having employees who feel cared for and happy isn’t just good, it’s good business.
+
+Based on profiling the respondents, Companies must know that gender and family history greatly influence the decision to get treatment for employees. So if the company wants to provide more support, the company must make an assessment of the employee's personality because different characters can determine different needs. Age can also be a trigger, considering that most of them are young so there is a high chance that they will be open-minded to get treatment.
+
+Based on the work environment of respondents, Work interference is the most influential of employees who want to get treatment. This means the company should consider providing facilities to anticipate job stress on employees. Some of the companies decide to make a private room or silent room in case employees suddenly feel stress and need a private moment to relieve.
+
+Based on the mental health facilities of respondents, The company needs to provide a good benefit for employees so they can maintain their mental health. If the company can don't have resources for it, there are so many third parties who can be hired to maintain a wellness program for the company. Building trust like keep private about whom employee that gets treatment also can also give a trigger for employee want to get treatment.
+
+So after we have done the EDA, next step is build the machine learning apps using R Shiny. The detail as follows:
+
+Machine Learning : Supervised learning - Classification. I will try use 3 basic models and 4 ensemble models to predict.
+
+Basic models:
+
++ Logistic Regression (logreg)
++ Decision Tree Classifier (tree)
++ K-Nearest Neighbor (knn)
+
+Ensemble models:
+
++ Random Forest Classifier (rf)
+
+
+Target Variable : 
+
++ treatment: Have you sought treatment for a mental health condition?
+
+Predictor Variable :
+
++ Age
++ Gender
++ self_employed: Are you self-employed?
++ family_history: Do you have a family history of mental illness?
++ work_interfere: If you have a mental health condition, do you feel that it interferes with your work?
++ no_employees: How many employees does your company or organization have?
++ remote_work: Do you work remotely (outside of an office) at least 50% of the time?
++ tech_company: Is your employer primarily a tech company/organization?
++ benefits: Does your employer provide mental health benefits?
++ care_options: Do you know the options for mental health care your employer provides?
++ wellness_program: Has your employer ever discussed mental health as part of an employee wellness program?
++ seek_help: Does your employer provide resources to learn more about mental health issues and how to seek help?
++ anonymity: Is your anonymity protected if you choose to take advantage of mental health or substance abuse treatment resources?
++ leave: How easy is it for you to take medical leave for a mental health condition?
++ mentalhealthconsequence: Do you think that discussing a mental health issue with your employer would have negative consequences?
++ physhealthconsequence: Do you think that discussing a physical health issue with your employer would have negative consequences?
++ coworkers: Would you be willing to discuss a mental health issue with your coworkers?
++ physhealthinterview: Would you bring up a physical health issue with a potential employer in an interview?
++ mentalvsphysical: Do you feel that your employer takes mental health as seriously as physical health?
++ obs_consequence: Have you heard of or observed negative consequences for coworkers with mental health conditions in your workplace?
+
+
+# Modelling
+
+## Logistic Regression
+
+Check Proportion of the target variable
+
+```{r}
+prop.table(table(mental_clean2$treatment))
+```
+Cross validation
+
+```{r}
+RNGkind(sample.kind = "Rounding")
+ 
+set.seed(901)
+
+index <- sample(nrow(mental_clean2), 
+                nrow(mental_clean2) *0.8) 
+
+mental_train <- mental_clean2[index, ] 
+mental_test <- mental_clean2[-index, ] 
+
+```
+
+```{r}
+prop.table(table(mental_train$treatment))
+```
+```{r}
+prop.table(table(mental_test$treatment))
+```
+Model Fitting
+
+```{r}
+
+set.seed(901)
+model_mental1 <- glm(treatment ~ ., data = mental_train, family = "binomial")
+summary(model_mental1)
+```
+```{r}
+library(car)
+vif(model_mental1)
+```
+No multicolinearity (GVIF<10)
+
+```{r}
+#linearity check
+
+data.frame(prediction=model_mental1$fitted.values,
+     error=model_mental1$residuals) %>% 
+  ggplot(aes(prediction,error)) +
+  geom_hline(yintercept=0) +
+  geom_point() +
+  geom_smooth() +
+  theme_bw()
+```
+```{r}
+saveRDS(model_mental1, "model_logreg.RDS")
+```
+
+Prediction
+
+```{r}
+mental_test$pred_result <- predict(object = model_mental1, 
+        newdata = mental_test, 
+        type = "response")
+
+```
+
+```{r}
+mental_test$pred_label <- ifelse(mental_test$pred_result < 0.5 ,"No", "Yes")
+mental_test$pred_label <- as.factor(mental_test$pred_label)
+head(mental_test)
+```
+
+```{r}
+library(caret)
+
+confusionMatrix(mental_test$pred_label, mental_test$treatment, positive = "Yes")
+```
+
+## Naive Bayes
+
+Model Fitting
+
+```{r}
+library(e1071) 
+model_naive <- naiveBayes(x = mental_train %>% select(-treatment), 
+                          y = mental_train$treatment, 
+                          laplace = 1) 
+```
+
+Prediction
+
+```{r}
+pred_naive <- predict(object= model_naive,
+                           newdata = mental_test,
+                           type="class")
+```
+
+```{r}
+confusionMatrix(data= pred_naive,
+                reference= mental_test$treatment,
+                positive="Yes")
+```
+
+
+
+## Decision Tree
+
+Model Fitting
+
+```{r}
+library(partykit)
+set.seed(901)
+
+model_dt <-ctree(treatment ~ ., mental_train)
+```
+
+Prediction
+
+```{r}
+pred_dt <- predict(model_dt, newdata = mental_test, type = "response")
+
+
+```
+
+```{r}
+confusionMatrix(pred_dt, mental_test$treatment, positive = "Yes")
+```
+```{r}
+plot(model_dt, type="simple")
+```
+
+## Random Forest
+
+Random Forest using a 5-Fold Cross Validation, with 3 repeats.
+
+```{r}
+#set.seed(901)
+ 
+#ctrl <- trainControl(method = "repeatedcv",
+#                      number = 5,
+#                      repeats = 3) 
+ 
+#model_forest <- train(treatment ~ .,
+#                    data = mental_train,
+#                    method = "rf", 
+#                    trControl = ctrl)
+ 
+#saveRDS(model_forest, "model_forest_update.RDS")
+```
+
+```{r}
+model_rf <- readRDS("model_forest_update.RDS")
+```
+
+
+Prediction
+
+```{r}
+pred_rf <- predict(model_rf, mental_test, type = "raw")
+```
+
+```{r}
+confusionMatrix(pred_rf, mental_test$treatment, positive = "Yes")
+```
+After We check the results of the model, our logistic regression model has better result.
+
+
+# Reference
+
++ https://www.iqmetrix.com/blog/lets-talk-its-time-to-get-serious-about-mental-illness-in-tech
++ https://membership.acs.org.au/member-insight/2020-05-05-the-silent-stigma-of-mental-health-in-the-tech-industry.html
++ https://www.kaggle.com/osmi/mental-health-in-tech-survey
+
